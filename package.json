@@ -12,7 +12,7 @@
     "dev:start": "npm-run-all build start",
     "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:start",
     "start": "node .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -r ts-node/register src/**/*.spec.ts"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/taffyb/Spite-Malice-Server#readme",
   "dependencies": {
+    "@types/es6-promise": "^3.3.0",
     "@types/uuid": "^3.4.5",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",

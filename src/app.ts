@@ -1,5 +1,6 @@
 import express from 'express';
 import logger from 'morgan';
+import {Neo4jSvc} from './classes/Neo4jSvc';
 import * as userRoutes from './routes/users';
 import dotenv from 'dotenv';
 dotenv.config();

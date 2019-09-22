@@ -114,5 +114,9 @@
       "check-separator",
       "check-type"
     ]
+  },
+  "env": {
+    "node": true,
+    "mocha": false
   }
 }
