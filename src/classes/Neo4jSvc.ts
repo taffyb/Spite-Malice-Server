@@ -15,14 +15,12 @@ export class Neo4jSvc {
         dotenv.config();
         this.connection = process.env.NEO4J_PROTOCOL + '://' + process.env.NEO4J_HOST + ':' + process.env.NEO4J_PORT;
 
-        // tslint:disable-next-line:no-console
         console.log( `connection:${ this.connection }` );
 
         this.auth = Neo4j.auth.basic(process.env.NEO4J_USERNAME, process.env.NEO4J_PASSWORD);
         this.driver = Neo4j.driver(this.connection, this.auth);
         this.session = this.driver.session();
 
-        // tslint:disable-next-line:no-console
         console.log( `Neo4jSvc initialised` );
     }
 
@@ -54,9 +52,9 @@ export class Neo4jSvc {
         return session;
     }
 
-    executeCypher(query: string, params: any, debug: boolean= false) :Promise<any>{
+    executeCypher(query: string, params: any, debug: boolean= false): Promise<any> {
         const me = this;
-        const results = new Promise((resolve,reject)=>{
+        const results = new Promise((resolve, reject) => {
             const session = this.getNewSession();
             const myParams: any = params || {};
             let cypher;
@@ -66,7 +64,7 @@ export class Neo4jSvc {
                 cypher = query;
             }
             if (debug) {
-                console.log(`***executeCypher***\nQueryName: (${query.endsWith('.cyp') ? query : ''}\nCypher:\n${cypher}\nParams:\n${JSON.stringify(myParams)}`);
+                console.log(`***executeCypher***\nQueryName: ${query.endsWith('.cyp') ? query : ''}\nCypher:\n${cypher}\nParams:\n${JSON.stringify(myParams)}`);
             }
             session
             .run(cypher, myParams)
@@ -78,10 +76,10 @@ export class Neo4jSvc {
                 }
                 if (result.records) {
                    if (result.records.length === 1) {
-                      resolve([me.cleanRecord(result.records[0])]);
+                      resolve([me.cleanRecord(me, result.records[0])]);
                    } else {
                       result.records.forEach((record: Neo4j.Record) => {
-                          cleanResults.push(me.cleanRecord(record));
+                          cleanResults.push(me.cleanRecord(me, record));
                       });
                       resolve(cleanResults);
                     }
@@ -89,31 +87,21 @@ export class Neo4jSvc {
             })
             .catch(function (error: Neo4j.Neo4jError) {
                 session.close();
-                console.log(`executeCypher ERROR: ${error}`);
-                console.log(`executeCypher ERROR ON: ${error.message}`);
+                console.log(`executeCypher ERROR: ${error.code}\n${error.message}`);
                 reject(error);
             });
         });
         return results;
     }
 
-    private cleanRecord(record: Neo4j.Record): any {
+    private cleanRecord(me: Neo4jSvc, record: Neo4j.Record): any {
         const cleanResult: any = {};
-        record.keys.forEach(function(key: string) {
+
+        record.keys.forEach((key: string) => {
             if (record.get(key).properties) {
-                cleanResult[key] = {};
-                const props = record.get(key).properties;
-                for (const p in props) {
-                    if (this.isObject(props[p])) {
-                        if (this.isNeo4jNumber(props[p])) {
-                            cleanResult[key][p] = Neo4j.integer.toNumber(props[p]);
-                        } else {
-                            cleanResult[key][p] = props[p];
-                        }
-                    } else {
-                        cleanResult[key][p] = props[p];
-                    }
-                }
+                cleanResult[key] = me.clean(me, record.get(key).properties);
+            } else if (Array.isArray(record.get(key))) {
+                cleanResult[key] = me.clean(me, record.get(key));
             } else {
                 cleanResult[key] = record.get(key);
             }
@@ -121,6 +109,33 @@ export class Neo4jSvc {
         return cleanResult;
     }
 
+    private clean(me: Neo4jSvc, obj: any): any {
+        let rtn: any;
+        if (Array.isArray(obj)) {
+            rtn = [];
+            obj.forEach((o) => {
+               rtn.push( me.clean(me, o));
+            });
+        } else {
+            if (obj.properties) {
+                rtn = {};
+                for (const p in obj.properties) {
+                    if (me.isObject(obj.properties[p])) {
+                        if (me.isNeo4jNumber(obj.properties[p])) {
+                            rtn[p] = Neo4j.integer.toNumber(obj.properties[p]);
+                        } else {
+                            rtn[p] = obj.properties[p];
+                        }
+                    } else {
+                        rtn[p] = obj.properties[p];
+                    }
+                }
+            } else {
+                rtn = obj;
+            }
+        }
+        return rtn;
+    }
 
     isObject(obj: any): boolean {
         return obj === Object(obj);

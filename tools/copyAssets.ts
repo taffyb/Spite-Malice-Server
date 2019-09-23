@@ -1,4 +1,4 @@
 import * as shell from "shelljs";
 
-// Copy all the view templates
-shell.cp( "-R", "src/json", "dist/" );
+// Copy all cypher files
+shell.cp( "-R", "src/cypher", "dist/" );
