@@ -3,13 +3,6 @@ import {CypherSvc} from './CypherSvc';
 import dotenv from 'dotenv';
 
 export class Neo4jSvc {
-    private static neo4jSvc: Neo4jSvc;
-    private session: Neo4j.Session;
-    private lastSession: number =  Date.now();
-    private RESET_INTERVAL = 1 * 60 * 1000; // 1 minute
-    private driver: Neo4j.Driver;
-    private connection: string;
-    private auth: any;
 
     constructor() {
         dotenv.config();
@@ -23,12 +16,76 @@ export class Neo4jSvc {
 
         console.log( `Neo4jSvc initialised` );
     }
+    private static neo4jSvc: Neo4jSvc;
+    private session: Neo4j.Session;
+    private lastSession: number =  Date.now();
+    private RESET_INTERVAL = 1 * 60 * 1000; // 1 minute
+    private driver: Neo4j.Driver;
+    private connection: string;
+    private auth: any;
 
     static getInstance(): Neo4jSvc {
         if (!this.neo4jSvc) {
             this.neo4jSvc = new Neo4jSvc();
         }
         return this.neo4jSvc;
+    }
+
+    private static cleanRecord( record: Neo4j.Record): any {
+        const cleanResult: any = {};
+
+        record.keys.forEach((key: string) => {
+            if (record.get(key).properties) {
+                cleanResult[key] = Neo4jSvc.clean(record.get(key).properties);
+            } else {
+                cleanResult[key] = Neo4jSvc.clean(record.get(key));
+            }
+        });
+        return cleanResult;
+    }
+
+    private static clean( obj: any): any {
+        let rtn: any;
+        if (Array.isArray(obj)) {
+            rtn = [];
+            obj.forEach((o) => {
+               rtn.push( Neo4jSvc.clean(o));
+            });
+        } else {
+            if (obj.properties) {
+                rtn = {};
+                for (const p in obj.properties) {
+                    if (Neo4jSvc.isObject(obj.properties[p])) {
+                        if (Neo4jSvc.isNeo4jNumber(obj.properties[p])) {
+                            rtn[p] = Neo4j.integer.toNumber(obj.properties[p]);
+                        } else {
+                            rtn[p] = obj.properties[p];
+                        }
+                    } else {
+                        rtn[p] = obj.properties[p];
+                    }
+                }
+            } else {
+                if (Neo4jSvc.isNeo4jNumber(obj)) {
+                    rtn = Neo4j.integer.toNumber(obj);
+                } else {
+                    rtn = obj;
+                }
+            }
+        }
+        return rtn;
+    }
+
+    static isObject(obj: any): boolean {
+        return obj === Object(obj);
+    }
+
+    static isArray(obj: any): boolean {
+        return Array.isArray(obj);
+    }
+
+   static isNeo4jNumber(obj: any): boolean {
+        return obj.hasOwnProperty('low') && obj.hasOwnProperty('high');
     }
 
     private getNewSession() {
@@ -76,10 +133,10 @@ export class Neo4jSvc {
                 }
                 if (result.records) {
                    if (result.records.length === 1) {
-                      resolve([me.cleanRecord(me, result.records[0])]);
+                      resolve([Neo4jSvc.cleanRecord(result.records[0])]);
                    } else {
                       result.records.forEach((record: Neo4j.Record) => {
-                          cleanResults.push(me.cleanRecord(me, record));
+                          cleanResults.push(Neo4jSvc.cleanRecord(record));
                       });
                       resolve(cleanResults);
                     }
@@ -92,60 +149,5 @@ export class Neo4jSvc {
             });
         });
         return results;
-    }
-
-    private cleanRecord(me: Neo4jSvc, record: Neo4j.Record): any {
-        const cleanResult: any = {};
-
-        record.keys.forEach((key: string) => {
-            if (record.get(key).properties) {
-                cleanResult[key] = me.clean(me, record.get(key).properties);
-            } else if (Array.isArray(record.get(key))) {
-                cleanResult[key] = me.clean(me, record.get(key));
-            } else {
-                cleanResult[key] = record.get(key);
-            }
-        });
-        return cleanResult;
-    }
-
-    private clean(me: Neo4jSvc, obj: any): any {
-        let rtn: any;
-        if (Array.isArray(obj)) {
-            rtn = [];
-            obj.forEach((o) => {
-               rtn.push( me.clean(me, o));
-            });
-        } else {
-            if (obj.properties) {
-                rtn = {};
-                for (const p in obj.properties) {
-                    if (me.isObject(obj.properties[p])) {
-                        if (me.isNeo4jNumber(obj.properties[p])) {
-                            rtn[p] = Neo4j.integer.toNumber(obj.properties[p]);
-                        } else {
-                            rtn[p] = obj.properties[p];
-                        }
-                    } else {
-                        rtn[p] = obj.properties[p];
-                    }
-                }
-            } else {
-                rtn = obj;
-            }
-        }
-        return rtn;
-    }
-
-    isObject(obj: any): boolean {
-        return obj === Object(obj);
-    }
-
-    isArray(obj: any): boolean {
-        return Array.isArray(obj);
-    }
-
-    isNeo4jNumber(obj: any): boolean {
-        return obj.low && obj.high;
     }
 }

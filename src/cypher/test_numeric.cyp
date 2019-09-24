@@ -1,0 +1,1 @@
+MATCH (p:Player) RETURN count(p) as playerCount

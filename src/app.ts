@@ -2,7 +2,7 @@ import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
 import {Neo4jSvc} from './classes/Neo4jSvc';
-import * as userRoutes from './routes/users';
+import * as playerRoutes from './routes/players';
 import * as gameRoutes from './routes/games';
 import * as moveRoutes from './routes/moves';
 import dotenv from 'dotenv';
@@ -21,7 +21,7 @@ app.get( '/', ( req: any, res: any ) => {
 } );
 
 // REGISTER OUR ROUTES -------------------------------
-userRoutes.register(app);
+playerRoutes.register(app);
 gameRoutes.register(app);
 moveRoutes.register(app);
 

@@ -3,8 +3,8 @@
 CREATE (g:Game)
 SET g.uuid=apoc.create.uuid()
 WITH g
-MATCH (p1:User{uuid:$p1Uuid})
-MATCH (p2:User{uuid:$p2Uuid})
+MATCH (p1:Player{uuid:$p1Uuid})
+MATCH (p2:Player{uuid:$p2Uuid})
 WITH g,p1,p2
 MERGE (g)-[:PLAYED_BY{player:1}]->(p1)
 MERGE(g)-[:PLAYED_BY{player:2}]->(p2)

@@ -13,8 +13,4 @@ FOREACH (x IN CASE WHEN move.isDiscard=true THEN ["isDiscard"] ELSE [] END |
 WITH t,collect(m) as moves
 WITH t,moves, moves[0] as firstMove
 MERGE (t)-[:NEXT_MOVE]->(firstMove)
-WITH t,moves
-UNWIND apoc.coll.pairsMin(moves) as pair
-WITH moves,pair[0] as m1,pair[1] as m2
-MERGE (m1)-[:NEXT_MOVE]->(m2)
 RETURN length(moves) as moveCount
