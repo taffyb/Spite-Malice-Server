@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/taffyb/Spite-Malice-Server#readme",
   "dependencies": {
+    "@mysql/xdevapi": "8.0.18",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "morgan": "^1.9.1",

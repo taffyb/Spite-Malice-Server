@@ -1,0 +1,24 @@
+INSERT INTO tbl_PLAYERS (UUID,NAME) VALUES ('6678a572-a5c4-4ecd-b3a9-d3bc6d41ff6a','Taffy');
+INSERT INTO tbl_PLAYERS (UUID,NAME) VALUES ('a416b750-e405-4c87-9ea2-f0862ff7d6ec','Suzannah');
+
+INSERT INTO tbl_GAME (UUID,NAME,PLAYER1_UUID,PLAYER2_UUID) 
+VALUES ('a416b750-e405-4c87-9ea2-f0862ff7d777',
+		'New Game',
+        '6678a572-a5c4-4ecd-b3a9-d3bc6d41ff6a',
+        'a416b750-e405-4c87-9ea2-f0862ff7d6ec');
+
+INSERT INTO tbl_TURN (UUID,GAME_UUID) 
+VALUES ('a416b750-e405-4c87-9ea2-f0862ff7dabc','a416b750-e405-4c87-9ea2-f0862ff7d777');
+
+INSERT INTO tbl_MOVE (TURN_UUID,FROM_POS,TO_POS,CARD_NUM) 
+VALUES ('a416b750-e405-4c87-9ea2-f0862ff7dabc',2,13,1);
+INSERT INTO tbl_MOVE (TURN_UUID,FROM_POS,TO_POS,CARD_NUM) 
+VALUES ('a416b750-e405-4c87-9ea2-f0862ff7dabc',3,13,2);
+
+CALL sp_addMove('a416b750-e405-4c87-9ea2-f0862ff7d777',
+'{"turnUUID":"a416b750-e405-4c87-9ea2-f0862ff7dabc",
+"playerUUID":"6678a572-a5c4-4ecd-b3a9-d3bc6d41ff6a",
+"fromPos":2,
+"toPos":3,
+"card":5,
+"isDiscard":true}');
