@@ -24,9 +24,14 @@ BEGIN
   	A new row is INSERTED into tbl_Game
   
   CHANGE HISTORY:
+  	11/01/2020 - Call setGameState = ACTIVE when create a new game
+  	12/01/2020 - FIX pGameUUID=>pUUID
 */
 	DECLARE vPlayerExists BOOLEAN;
     DECLARE vMESSAGE VARCHAR(256);
+    
+	SET vMESSAGE = concat('CALL sp_addGame(',pUUID,',',pName,',',pPlayer1UUID,',',pPlayer2UUID,')');
+	CALL sp_log_msg(vMESSAGE);
 	
 	SET vPlayerExists = (SELECT count(*) FROM tbl_player WHERE UUID=pPlayer1UUID)>0;
 	IF(NOT vPlayerExists) THEN
@@ -43,6 +48,9 @@ BEGIN
     END IF;
 		
     INSERT INTO tbl_game(UUID,NAME,PLAYER1_UUID,PLAYER2_UUID)
-    	VALUES(pGameUUID,pName,pPlayer1UUID,pPlayer2UUID);
+    	VALUES(pUUID,pName,pPlayer1UUID,pPlayer2UUID);
+    
+    -- CALL sp_log_msg( 'B4 CALL setGameState');
+    CALL sp_setGameState(pUUID,'ACTIVE');
 END$$
 DELIMITER ;

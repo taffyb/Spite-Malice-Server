@@ -30,7 +30,9 @@ BEGIN
     -- declare NOT FOUND handler
     DECLARE CONTINUE HANDLER 
         FOR NOT FOUND SET finished = 1;       
-        
+       
+	SET vMESSAGE = concat('CALL sp_setCards(',pGameUUID,',',pCards,',',pPositionName,',',coalesce(pPlayerUUID,'NULL'),')');
+	CALL sp_log_msg(vMESSAGE);
     SET vExists = (SELECT count(*) FROM tbl_game WHERE UUID=pGameUUID)>0;
 	IF(NOT vExists) THEN
 		SET vMESSAGE = 'Game('+vGameUUID+') does not exist';
@@ -39,7 +41,7 @@ BEGIN
     END IF;        
     SET vExists = (SELECT count(*) FROM tbl_position WHERE NAME=pPositionName)>0;
 	IF(NOT vExists) THEN
-		SET vMESSAGE = 'Position('+vPositionName+') does not exist';
+		SET vMESSAGE = concat('Position(',pPositionName,') does not exist');
 		SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = vMESSAGE;
     END IF;        
@@ -50,9 +52,11 @@ BEGIN
             SET MESSAGE_TEXT = vMESSAGE;
     END IF;        
     
+   -- CALL sp_log_msg(pCards);
 	drop temporary table if exists temp;
 	create temporary table temp( card int );
     set @sql = concat("insert into temp (card) values (", replace(pCards, ",", "),("),");");
+    -- CALL sp_log_msg(@sql);
     prepare stmt1 from @sql;
 	execute stmt1;
         
@@ -63,8 +67,8 @@ BEGIN
             LEAVE getCards;
         END IF;
         -- build email list
-        INSERT INTO tbl_card(GAME_UUID,CARD_NO,POSITION,PLAYER)
-        VALUES(pGameUUID,vCard,(SELECT ID FROM tbl_position WHERE NAME=pPositionName),pPlayer);
+        INSERT INTO tbl_card(GAME_UUID,CARD_NO,POSITION,PLAYER_UUID)
+        VALUES(pGameUUID,vCard,fn_PositionName2Id(pPositionName),pPlayerUUID);
     END LOOP getCards;
 	CLOSE curCards;
 /*        

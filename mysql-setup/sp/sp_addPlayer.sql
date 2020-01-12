@@ -1,6 +1,6 @@
 DROP PROCEDURE IF EXISTS sp_addPlayer;
 DELIMITER $$
-CREATE PROCEDURE `sp_addPlayer`(IN pName varchar(36),IN pUUID varchar(36))
+CREATE PROCEDURE `sp_addPlayer`(IN pUUID varchar(36),IN pName varchar(36))
 BEGIN
 /*
   CREATED: 11/01/2020, Taffy Brecknock
@@ -17,6 +17,10 @@ BEGIN
   
   CHANGE HISTORY:
 */
+    DECLARE vMESSAGE VARCHAR(1000);
+    
+	SET vMESSAGE = concat('CALL sp_addPlayer(',pUUID,',',pName,')');
+	CALL sp_log_msg(vMESSAGE);
 	INSERT INTO tbl_player(UUID, name) VALUES (pUUID, pName);
 END$$
 DELIMITER ;

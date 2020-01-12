@@ -20,8 +20,13 @@ BEGIN
     
   CHANGE HISTORY:
 */
+    DECLARE vMESSAGE VARCHAR(1000);
+    
+	SET vMESSAGE = concat('CALL sp_updateCardPosition(pGameUUID:',pGameUUID,',pFromPos:',pFromPos,',pToPos:',pToPos,',pCard:',pCard,',pPlayerUUID:',pPlayerUUID,')');
+	CALL sp_log_msg(vMESSAGE);
+    
 	UPDATE tbl_card
-		SET POSITION = vToPos, PLAYER = vPlayerUUID
+		SET POSITION = pToPos, PLAYER_UUID = pPlayerUUID
 	WHERE GAME_UUID=pGameUUID AND CARD_NO=pCard AND POSITION=pFromPos;
 END$$
 DELIMITER ;
