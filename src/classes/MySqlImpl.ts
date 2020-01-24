@@ -8,6 +8,9 @@ import {IMoveModel} from './IMoveModel';
 import {MySqlSvc} from './MySqlSvc';
 
 export class MySqlImpl implements IDatabaseImpl {
+    performMoves(gameUUID: string, playerUUID: string, moves: IMoveModel[]): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
     mysql: MySqlSvc;
     constructor() {
         this.mysql = MySqlSvc.getInstance();
