@@ -22,5 +22,7 @@ BEGIN
 	SET vMESSAGE = concat('CALL sp_addPlayer(',pUUID,',',pName,')');
 	CALL sp_log_msg(vMESSAGE);
 	INSERT INTO tbl_player(UUID, name) VALUES (pUUID, pName);
+    
+    SELECT UUID, NAME FROM tbl_player WHERE UUID=pUUID;
 END$$
 DELIMITER ;

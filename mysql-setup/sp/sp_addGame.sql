@@ -52,6 +52,6 @@ BEGIN
     
     -- CALL sp_log_msg( 'B4 CALL setGameState');
     CALL sp_setGameState(pUUID,'ACTIVE');
-    SELECT * FROM tbl_game;
+    SELECT * FROM tbl_game WHERE UUID=pUUID;
 END$$
 DELIMITER ;

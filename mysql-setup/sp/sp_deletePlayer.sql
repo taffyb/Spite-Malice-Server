@@ -6,6 +6,8 @@ BEGIN
 	UPDATE tbl_player
 		SET DELETED=true
 	WHERE UUID = pPlayerUUID;
+	
+	SELECT DELETED FROM tbl_player WHERE UUID = pPlayerUUID;
 END$$
 
 DELIMITER ;

@@ -1,19 +1,44 @@
 import * as express from 'express';
-import {Neo4jSvc} from '../classes/Neo4jSvc';
 import {DatabaseSvc} from '../classes/DatabaseSvc';
+import {IPlayerModel} from '../classes/IPlayerModel';
+import { v4 as uuid } from 'uuid';
 
 export const register = ( app: express.Application, prefix: string= '/api' ) => {
     const dbSvc = DatabaseSvc.getInstance();
 
-    app.get( prefix + '/player/:uuid', async ( req: any, res ) => {
-        const uuid = req.params.uuid;
-        const player = await dbSvc.getPlayer(uuid);
-
-        res.send( player );
+    app.get( prefix + '/players/:uuid', ( req: any, res ) => {
+        const playerUuid = req.params.uuid;
+        const player = dbSvc.getPlayer(playerUuid);
+        player
+         .then((p: IPlayerModel) => {res.send( p ); })
+         .catch((err) => {res.status(500).send(err); });
     });
-    app.get( prefix + '/player', async ( req: any, res ) => {
-        const results = await dbSvc.test();
+    app.get( prefix + '/players', ( req: any, res ) => {
+        const players = dbSvc.getPlayers();
 
-        res.send( results );
+        players
+         .then((p: IPlayerModel[]) => {res.send( p ); })
+         .catch((err) => {res.status(500).send(err); });
+    });
+    app.post( prefix + '/players', ( req: any, res ) => {
+        const playerUuid = uuid();
+        const player = dbSvc.addPlayer(playerUuid, req.body.name);
+        player
+        .then((p: IPlayerModel) => {res.send( p ); })
+        .catch((err) => {res.status(500).send(err); });
+    });
+    app.put( prefix + '/players/:uuid', ( req: any, res ) => {
+        const playerUuid = req.params.uuid;
+        const player = dbSvc.updatePlayer(playerUuid, req.body.name);
+        player
+        .then((p: IPlayerModel) => {res.send( p ); })
+        .catch((err) => {res.status(500).send(err); });
+    });
+    app.delete( prefix + '/players/:uuid', ( req: any, res ) => {
+        const playerUuid = req.params.uuid;
+        const deleted = dbSvc.deletePlayer(playerUuid);
+        deleted
+        .then((d: boolean) => {res.status( 200 ).send(true); })
+        .catch((err) => {res.status(500).send(err); });
     });
 };
