@@ -7,8 +7,8 @@ import { v4 as uuid } from 'uuid';
 export const register = ( app: express.Application, prefix: string= '/api' ) => {
     const dbSvc = DatabaseSvc.getInstance();
 /*
-    GET     /games          ALL games (Not including deleted)
     POST    /games          Add a New Game
+    GET     /games          ALL games (Not including deleted)
     GET     /games/:uuid    Specific Game
     PUT     /games/:uuid    Update a specific Game
     DELETE  /games/:uuid    Remove a specific Game (Mark as Deleted)
@@ -66,14 +66,14 @@ export const register = ( app: express.Application, prefix: string= '/api' ) => 
          .then((g: IGameModel[]) => {res.send( g ); })
          .catch((err) => {res.status(500).send(err); });
     });
-    app.post( prefix + '/games/:uuid/moves', ( req: any, res ) => {
-        const moves: IMoveModel[] = req.body;
-        const GUuid: string = req.params.uuid;
-
-        const m = dbSvc.add(newGame);
-
-        m
-        .then((d: boolean) => {res.status( 200 ).send(true); })
-        .catch((err) => {res.status(500).send(err); });
-    });
+//    app.post( prefix + '/games/:uuid/moves', ( req: any, res ) => {
+//        const moves: IMoveModel[] = req.body;
+//        const GUuid: string = req.params.uuid;
+//
+//        const m = dbSvc.add(newGame);
+//
+//        m
+//        .then((d: boolean) => {res.status( 200 ).send(true); })
+//        .catch((err) => {res.status(500).send(err); });
+//    });
 };

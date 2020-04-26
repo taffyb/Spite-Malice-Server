@@ -1,16 +1,10 @@
 import {IDatabaseImpl} from './IDatabaseImpl';
 import {IPlayerActions} from './IPlayerActions';
 import {IGameActions} from './IGameActions';
-import {IGameModel} from './IGameModel';
-import {IPlayerModel} from './IPlayerModel';
-import {IPositionModel} from './IPositionModel';
-import {IMoveModel} from './IMoveModel';
+import {IGameModel, IPlayerModel, IMoveModel} from 's-n-m-lib';
 import {MySqlSvc} from './MySqlSvc';
 
 export class MySqlImpl implements IDatabaseImpl {
-    performMoves(gameUUID: string, playerUUID: string, moves: IMoveModel[]): Promise<boolean> {
-        throw new Error("Method not implemented.");
-    }
     mysql: MySqlSvc;
     constructor() {
         this.mysql = MySqlSvc.getInstance();
@@ -38,7 +32,7 @@ export class MySqlImpl implements IDatabaseImpl {
 
         return this.mysql.executeStoredProc<IGameModel>(
                 'addGame(?,?,?,?)',
-                [game.UUID, game.name, game.player1UUID, game.player2UUID]
+                [game.uuid, game.name, game.player1Uuid, game.player2Uuid]
                 );
     }
     deleteGame(UUID: string): Promise<boolean> {
@@ -60,10 +54,7 @@ export class MySqlImpl implements IDatabaseImpl {
     updateCard(gameUUID: string, move: IMoveModel): Promise < boolean > {
         throw new Error('Method not implemented.');
     }
-    performMooves(gameUUID: string, playerUUID: string, moves: IMoveModel[]): Promise<boolean> {
+    performMoves(gameUUID: string, playerUUID: string, moves: IMoveModel[]): Promise<boolean> {
         throw new Error('Method not implemented.');
-    }
-    test(): Promise<IPositionModel[]> {
-        return this.mysql.executeSql<IPositionModel>('SELECT * FROM mydb.vw_position');
     }
 }

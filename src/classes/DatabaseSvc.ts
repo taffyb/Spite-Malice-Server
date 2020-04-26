@@ -1,18 +1,16 @@
-import {IGameModel} from './IGameModel';
-import {IPlayerModel} from './IPlayerModel';
-import {IMoveModel} from './IMoveModel';
+import {IGameModel, IPlayerModel, IMoveModel} from 's-n-m-lib';
 import {IDatabaseImpl} from './IDatabaseImpl';
 import {MySqlImpl} from './MySqlImpl';
 import dotenv from 'dotenv';
 
 export class DatabaseSvc implements IDatabaseImpl {
 
-    static svc: DatabaseSvc;
-    db: IDatabaseImpl;
-
     private constructor() {
         dotenv.config();
     }
+
+    static svc: DatabaseSvc;
+    db: IDatabaseImpl;
     static getInstance(): DatabaseSvc {
         if (!this.svc) {
             this.svc = new DatabaseSvc();
@@ -31,6 +29,9 @@ export class DatabaseSvc implements IDatabaseImpl {
         const dbImpl = (await import(impl));
         svc.db = dbImpl;
         console.log(`impl:${JSON.stringify(dbImpl)}`);
+    }
+    performMoves(gameUUID: string, playerUUID: string, moves: IMoveModel[]): Promise<boolean> {
+        throw new Error('Method not implemented.');
     }
     addGame(game: IGameModel): Promise<IGameModel> {
         return this.db.addGame(game);

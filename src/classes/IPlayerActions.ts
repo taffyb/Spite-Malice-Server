@@ -1,4 +1,4 @@
-import {IPlayerModel} from './IPlayerModel';
+import {IPlayerModel} from 's-n-m-lib';
 
 export interface IPlayerActions {
     addPlayer(UUID: string, name: string): Promise<IPlayerModel>;
@@ -6,5 +6,4 @@ export interface IPlayerActions {
     updatePlayer(UUID: string, name: string): Promise<IPlayerModel>;
     getPlayer(UUID: string): Promise<IPlayerModel>;
     getPlayers(): Promise<IPlayerModel[]>;
-    test(): Promise<any[]>;
 }

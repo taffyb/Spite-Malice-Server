@@ -128,9 +128,9 @@ INSERT INTO `tbl_position` (`ID`,`NAME`,IS_PLAYER_POSITION) VALUES (6,'PLAYER_ST
 INSERT INTO `tbl_position` (`ID`,`NAME`,IS_PLAYER_POSITION) VALUES (7,'PLAYER_STACK_2',TRUE);
 INSERT INTO `tbl_position` (`ID`,`NAME`,IS_PLAYER_POSITION) VALUES (8,'PLAYER_STACK_3',TRUE);
 INSERT INTO `tbl_position` (`ID`,`NAME`,IS_PLAYER_POSITION) VALUES (9,'PLAYER_STACK_4',TRUE);
-INSERT INTO `tbl_position` (`ID`,`NAME`) VALUES (10,'STACK_1');
-INSERT INTO `tbl_position` (`ID`,`NAME`) VALUES (11,'STACK_2');
-INSERT INTO `tbl_position` (`ID`,`NAME`) VALUES (12,'STACK_3');
-INSERT INTO `tbl_position` (`ID`,`NAME`) VALUES (13,'STACK_4');
-INSERT INTO `tbl_position` (`ID`,`NAME`) VALUES (20,'DECK');
-INSERT INTO `tbl_position` (`ID`,`NAME`) VALUES (21,'RECYCLE');
+INSERT INTO `tbl_position` (`ID`,`NAME`) VALUES (20,'STACK_1');
+INSERT INTO `tbl_position` (`ID`,`NAME`) VALUES (21,'STACK_2');
+INSERT INTO `tbl_position` (`ID`,`NAME`) VALUES (22,'STACK_3');
+INSERT INTO `tbl_position` (`ID`,`NAME`) VALUES (23,'STACK_4');
+INSERT INTO `tbl_position` (`ID`,`NAME`) VALUES (24,'DECK');
+INSERT INTO `tbl_position` (`ID`,`NAME`) VALUES (25,'RECYCLE');

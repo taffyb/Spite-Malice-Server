@@ -1,13 +1,11 @@
 import {IDatabaseImpl} from './IDatabaseImpl';
 import {IPlayerActions} from './IPlayerActions';
 import {IGameActions} from './IGameActions';
-import {IGameModel} from './IGameModel';
-import {IPlayerModel} from './IPlayerModel';
-import {IMoveModel} from './IMoveModel';
+import {IGameModel, IPlayerModel, IMoveModel} from 's-n-m-lib';
 
 export class Neo4JImpl implements IDatabaseImpl {
     performMoves(gameUUID: string, playerUUID: string, moves: IMoveModel[]): Promise<boolean> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
     addPlayer(UUID: string, name: string): Promise<IPlayerModel> {
         throw new Error('Method not implemented.');

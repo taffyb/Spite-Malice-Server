@@ -1,5 +1,4 @@
-import {IGameModel} from './IGameModel';
-import {IMoveModel} from './IMoveModel';
+import {IGameModel,IMoveModel} from 's-n-m-lib';
 
 export interface IGameActions {
     addGame(game: IGameModel): Promise<IGameModel>;
