@@ -1,7 +1,6 @@
 import express from 'express';
 import {DatabaseSvc} from '../classes/DatabaseSvc';
-import {IGameModel} from '../classes/IGameModel';
-import {IMoveModel} from '../classes/IMoveModel';
+import {IGameModel, IMoveModel} from 's-n-m-lib';
 import { v4 as uuid } from 'uuid';
 
 export const register = ( app: express.Application, prefix: string= '/api' ) => {
@@ -26,7 +25,11 @@ export const register = ( app: express.Application, prefix: string= '/api' ) => 
     app.post( prefix + '/games', ( req: any, res ) => {
         const p1Uuid: string = req.body.p1Uuid;
         const p2Uuid: string = req.body.p2Uuid;
-        const newGame: IGameModel = {UUID: uuid(), name: req.body.name, player1UUID: p1Uuid, player2UUID: p2Uuid};
+        const newGame: IGameModel = {uuid: uuid(), 
+                                     name: req.body.name, 
+                                     player1Uuid: p1Uuid, 
+                                     player2Uuid: p2Uuid
+                                    };
 
         const game = dbSvc.addGame(newGame);
 

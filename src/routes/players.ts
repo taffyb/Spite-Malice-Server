@@ -1,6 +1,6 @@
 import * as express from 'express';
 import {DatabaseSvc} from '../classes/DatabaseSvc';
-import {IPlayerModel} from '../classes/IPlayerModel';
+import {IPlayerModel} from 's-n-m-lib';
 import { v4 as uuid } from 'uuid';
 
 export const register = ( app: express.Application, prefix: string= '/api' ) => {
