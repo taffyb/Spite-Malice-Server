@@ -81,8 +81,5 @@ export class DatabaseSvc implements IDatabaseImpl {
         return this.db.getPlayers();
 //        throw new Error("Method not implemented.");
     }
-    test(): Promise<any[]> {
-         return this.db.test();
-    }
 
 }

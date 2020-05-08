@@ -10,7 +10,7 @@ export class DynamoDbSvc {
         dotenv.config();
         const endpoint = process.env.DYNAMODB_ENDPOINT;
         const config: DynamoDBConfiguration = {endpoint: endpoint};
-        this.dynamodb=new DynamoDB(config);
+        this.dynamodb = new DynamoDB(config);
     }
 
     static getInstance(): DynamoDbSvc {
@@ -20,7 +20,7 @@ export class DynamoDbSvc {
         return this.dynamoDbSvc;
     }
 
-    createTable(tableName: string, keySchema:any,attributeDefinitions:any,provisionedThroughput:any){
+    createTable(tableName: string, keySchema: any, attributeDefinitions: any, provisionedThroughput: any) {
       const params = {
           TableName : tableName,
           KeySchema: keySchema,
@@ -34,17 +34,17 @@ export class DynamoDbSvc {
                 console.log('Created table. Table description JSON:', JSON.stringify(data, null, 2));
             }
         });
-        
+
     }
     dropTable(tableName: string): boolean {
         return null;
     }
-    putItem(){}
+    putItem() {}
 //    getItem<T>():<T>{
 //        return null;
 //    }
 //    getItems<T>():<T[]>
 //        {return null;
 //    }
-    
+
 }

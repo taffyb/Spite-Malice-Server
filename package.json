@@ -33,7 +33,7 @@
     "mysql": "^2.18.1",
     "neo4j-driver": "^1.7.6",
     "path": "^0.12.7",
-    "s-n-m-lib": "^1.1.5",
+    "s-n-m-lib": "^1.1.9",
     "uuid": "^3.4.0"
   },
   "devDependencies": {

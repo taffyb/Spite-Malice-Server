@@ -25,9 +25,9 @@ export const register = ( app: express.Application, prefix: string= '/api' ) => 
     app.post( prefix + '/games', ( req: any, res ) => {
         const p1Uuid: string = req.body.p1Uuid;
         const p2Uuid: string = req.body.p2Uuid;
-        const newGame: IGameModel = {uuid: uuid(), 
-                                     name: req.body.name, 
-                                     player1Uuid: p1Uuid, 
+        const newGame: IGameModel = {uuid: uuid(),
+                                     name: req.body.name,
+                                     player1Uuid: p1Uuid,
                                      player2Uuid: p2Uuid
                                     };
 
